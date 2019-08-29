@@ -54,10 +54,9 @@ walkThePlankButton.addEventListener('click', () => {
   }
   const walkedCrewMembers = document.getElementById('walked-crew')
   const walkedCrewMember = store.getState().currentCrewMembers.shift()
-  console.log(`walkedCrewMember: ${walkedCrewMember}`)
-  console.log(store.getState().currentCrewMembers)
   walkedCrewMembers.innerHTML += `<li>${walkedCrewMember}</li>`
   store.dispatch(incrementWalkedCount())
+  document.getElementById('plank-walkers').innerHTML = store.getState().walkedCount
 })
 
 const render = () => {
