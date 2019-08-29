@@ -12,7 +12,16 @@ const initialState = {
 // Reducer
 
 const gifReducer = (state = initialState, action) => {
-  // ...fill in your Reducer code here
+  switch(action.type) {
+    case ADD_PUP:
+      const newPups = state.pups.concat(action.newPup)
+      debugger
+      return Object.assign({}, state, {
+        pups: newPups
+      })
+    default:
+      return state
+  }
 }
 
 // JS to access new pup form
@@ -23,6 +32,17 @@ const newPupForm = document.getElementById('new-pup-form')
 
 const ADD_PUP = 'ADD_PUP'
 
+// Declare action creator
+
+const addNewPup = (newPup) => {
+  return (
+    {
+      type: ADD_PUP,
+      newPup: newPup
+    }
+  )
+}
+
 // Submits form and dispatches add action
 
 newPupForm.addEventListener('submit', () => {
@@ -32,12 +52,7 @@ newPupForm.addEventListener('submit', () => {
   document.getElementById('gif-url').value = ''
   document.getElementById('gif-rating').value = ''
   const newPup = { url: gifUrl, rating: gifRating }
-  store.dispatch(
-    {
-      type: ADD_PUP,
-      newPup: newPup
-    }
-  )
+  store.dispatch(addNewPup(newPup))
 })
 
 // Sets up store
@@ -45,3 +60,16 @@ const store = createStore(gifReducer);
 
 // Renders list of gifs to page
 const gifList = document.getElementById('gif-list')
+
+const render = () => {
+  const pup = store.getState().pups.slice(-1)[0]
+  let pupNode = document.createElement('li')
+  let pupImg = document.createElement('img')
+  pupImg['src'] = pup.url
+  pupNode.innerHTML = pup.rating
+  pupNode.appendChild(pupImg)
+  gifList.appendChild(pupNode)
+}
+
+render()
+store.subscribe(render)
